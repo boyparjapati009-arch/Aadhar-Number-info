@@ -1,47 +1,13 @@
-import { HistoryItem } from '../types';
-import { formatResultToString } from './download';
 
-const getHistoryFromStorage = <T>(key: string): HistoryItem<T>[] => {
-  try {
-    const storedHistory = window.localStorage.getItem(key);
-    return storedHistory ? JSON.parse(storedHistory) : [];
-  } catch (error) {
-    console.error(`Error reading ${key} from localStorage`, error);
-    return [];
-  }
-};
-
-const formatHistoryCategory = (title: string, history: HistoryItem<any>[]): string => {
-  if (!history || history.length === 0) {
-    return `==============================\n${title.toUpperCase()}\n==============================\nNo history found for this category.`;
-  }
-
-  const header = `==============================\n${title.toUpperCase()}\n==============================`;
-  
-  const content = history.map((item, index) => {
-    const itemHeader = `----------\nSearch #${index + 1}: ${item.query}\n----------`;
-    const body = formatResultToString(item.result);
-    return `${itemHeader}\n${body}`;
-  }).join('\n\n');
-
-  return `${header}\n\n${content}`;
-};
+import { formatAllHistoryToString } from './formatters';
 
 export const downloadAllHistory = (): void => {
-  const aadhaarHistory = getHistoryFromStorage('aadhaarHistory');
-  const numberHistory = getHistoryFromStorage('numberHistory');
-  const combinedHistory = getHistoryFromStorage('combinedHistory');
+  const fullContent = formatAllHistoryToString();
 
-  if (aadhaarHistory.length === 0 && numberHistory.length === 0 && combinedHistory.length === 0) {
-    alert("No search history found to download.");
+  if (fullContent.startsWith("No search history")) {
+    alert(fullContent);
     return;
   }
-
-  const aadhaarContent = formatHistoryCategory('Aadhaar Search History', aadhaarHistory);
-  const numberContent = formatHistoryCategory('Number Search History', numberHistory);
-  const combinedContent = formatHistoryCategory('Full Profile Search History', combinedHistory);
-  
-  const fullContent = [aadhaarContent, numberContent, combinedContent].join('\n\n\n');
 
   const blob = new Blob([fullContent], { type: 'text/plain;charset=utf-8' });
   const url = URL.createObjectURL(blob);

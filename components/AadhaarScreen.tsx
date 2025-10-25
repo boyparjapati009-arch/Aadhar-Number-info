@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback } from 'react';
 import { AadhaarDetails, HistoryItem } from '../types';
 import { fetchAadhaarDetails, fetchAadhaarProtectedList } from '../services/aadhaarApi';
@@ -6,7 +7,6 @@ import SearchCard from './SearchCard';
 import AadhaarResultsCard from './AadhaarResultsCard';
 import Loader from './Loader';
 import HistoryCard from './HistoryCard';
-import { downloadHistoryAsTxt } from '../utils/download';
 
 const AadhaarScreen: React.FC = () => {
   const [aadhaarNumber, setAadhaarNumber] = useState<string>('');
@@ -79,10 +79,6 @@ const AadhaarScreen: React.FC = () => {
     setIsProtected(false);
   };
 
-  const handleDownloadHistory = () => {
-    downloadHistoryAsTxt(history, 'aadhaar-search-history.txt');
-  };
-
   return (
     <>
       <header className="text-center mb-10">
@@ -110,7 +106,7 @@ const AadhaarScreen: React.FC = () => {
         onItemClick={handleHistoryClick}
         onClear={clearHistory}
         title="Recent Aadhaar Searches"
-        onDownload={handleDownloadHistory}
+        fileNamePrefix="aadhaar-search"
       />
       
       <div className="w-full mt-8">

@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback } from 'react';
 import { NumberResponse, HistoryItem } from '../types';
 import { fetchNumberDetails, fetchNumberProtectedList } from '../services/numberApi';
@@ -6,7 +7,6 @@ import SearchCard from './SearchCard';
 import NumberResultsCard from './NumberResultsCard';
 import Loader from './Loader';
 import HistoryCard from './HistoryCard';
-import { downloadHistoryAsTxt } from '../utils/download';
 
 const NumberScreen: React.FC = () => {
   const [phoneNumber, setPhoneNumber] = useState<string>('');
@@ -65,10 +65,6 @@ const NumberScreen: React.FC = () => {
     setIsProtected(false);
   };
 
-  const handleDownloadHistory = () => {
-    downloadHistoryAsTxt(history, 'number-search-history.txt');
-  };
-
   return (
     <>
       <header className="text-center mb-10">
@@ -96,7 +92,7 @@ const NumberScreen: React.FC = () => {
         onItemClick={handleHistoryClick}
         onClear={clearHistory}
         title="Recent Number Searches"
-        onDownload={handleDownloadHistory}
+        fileNamePrefix="number-search"
       />
 
       <div className="w-full mt-8">

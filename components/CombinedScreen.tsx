@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback } from 'react';
 import { AadhaarDetails, CombinedDetails, NumberResponse, HistoryItem } from '../types';
 import { fetchAadhaarDetails, fetchAadhaarProtectedList } from '../services/aadhaarApi';
@@ -7,7 +8,6 @@ import SearchCard from './SearchCard';
 import Loader from './Loader';
 import HistoryCard from './HistoryCard';
 import CombinedResultsCard from './CombinedResultsCard';
-import { downloadHistoryAsTxt } from '../utils/download';
 
 const CombinedScreen: React.FC = () => {
   const [phoneNumber, setPhoneNumber] = useState<string>('');
@@ -106,10 +106,6 @@ const CombinedScreen: React.FC = () => {
     setIsProtected(false);
   };
 
-  const handleDownloadHistory = () => {
-    downloadHistoryAsTxt(history, 'profile-search-history.txt');
-  };
-
   return (
     <>
       <header className="text-center mb-10">
@@ -137,7 +133,7 @@ const CombinedScreen: React.FC = () => {
         onItemClick={handleHistoryClick}
         onClear={clearHistory}
         title="Recent Profile Searches"
-        onDownload={handleDownloadHistory}
+        fileNamePrefix="profile-search"
       />
 
       <div className="w-full mt-8">
